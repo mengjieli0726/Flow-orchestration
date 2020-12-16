@@ -1,0 +1,86 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  name: case3-disconnected-demo
+spec:
+  params:
+    - name: Token
+      value: "eyJraWQiOiIyMDIwMTEyODE0NDkiLCJhbGciOiJSUzI1NiJ9.eyJpYW1faWQiOiJJQk1pZC01NTAwMDFXVDBHIiwiaWQiOiJJQk1pZC01NTAwMDFXVDBHIiwicmVhbG1pZCI6IklCTWlkIiwianRpIjoiMWYwYjA5NmEtNWFlYy00NjVkLWEzYmUtNWFmOWI4YzBlYzQzIiwiaWRlbnRpZmllciI6IjU1MDAwMVdUMEciLCJnaXZlbl9uYW1lIjoiTWVuZyBKaWUiLCJmYW1pbHlfbmFtZSI6IkxpIiwibmFtZSI6Ik1lbmcgSmllIExpIiwiZW1haWwiOiJtZW5namllbGlAY24uaWJtLmNvbSIsInN1YiI6Im1lbmdqaWVsaUBjbi5pYm0uY29tIiwiYWNjb3VudCI6eyJ2YWxpZCI6dHJ1ZSwiYnNzIjoiZGIzYWEyMDU3OGQ0NDlmODhjYjY2ZDZkNmNlMmM5ODUiLCJmcm96ZW4iOnRydWV9LCJpYXQiOjE2MDY4Nzk5NDUsImV4cCI6MTYwNjg4MzU0NSwiaXNzIjoiaHR0cHM6Ly9pYW0udGVzdC5jbG91ZC5pYm0uY29tL2lkZW50aXR5IiwiZ3JhbnRfdHlwZSI6InVybjppYm06cGFyYW1zOm9hdXRoOmdyYW50LXR5cGU6YXBpa2V5Iiwic2NvcGUiOiJpYm0gb3BlbmlkIiwiY2xpZW50X2lkIjoiZGVmYXVsdCIsImFjciI6MSwiYW1yIjpbInB3ZCJdfQ.PQRhjaBhEPKG_Yw5a3PIalzDzlbnxt22NnVZVNEc_463YVoiYYVagt3iTyrARprybJBStEVBkxjmNu5p23R_KybpKhaSOOy2rbOypK_r6uhyL3PTIXDP4rFKXWM537q0SPLK2NgBlPwcOudogihMmQ1TTGc85YH3TJNV0LXLl8G9WofvOm4_8nLSdGLBfTtAlf4ytzzv_VlWMKGC2J1W3yooN6GSa7wDiav_3too-yTus0jI76zxJ_yFoZyS6WSmFtyn_F5leloxRPV22Zp-2qULC8PA2xor4lQFVL929cfMWNVJvM_o1zLiQeFSI_CTgwmoR7L6CfOgYnQfXZ0pZw"
+    - name: Project_ID
+      value: "2cf7dba3-440e-4916-8470-edc84df8816c"
+    - name: Job_ID
+      value: "43461a49-e310-42a1-8ad2-14dc53b5e04a"
+  serviceAccountName: 'default'
+  pipelineSpec:
+    params:
+      - name: Token
+      - name: Project_ID
+      - name: Job_ID
+    tasks:
+      - name: disconnected-activity1
+        params:
+        - name: Token
+          value: $(params.Token)
+        - name: Project_ID
+          value: $(params.Project_ID)
+        - name: Job_ID
+          value: $(params.Job_ID)
+        taskSpec:
+          params:
+          - name: Token
+          - name: Project_ID
+          - name: Job_ID
+          steps:
+            - name: main
+              image: hejinchi/datastage:v0.41
+              imagePullPolicy: IfNotPresent
+              securityContext:
+                runAsUser: 0
+              command: ["/bin/bash", "-c"]
+              args: ["/datastage/dsRun $(params.Project_ID) $(params.Job_ID) $(params.Token)"]
+      - name: disconnected-activity2
+        params:
+        - name: Token
+          value: $(params.Token)
+        - name: Project_ID
+          value: $(params.Project_ID)
+        - name: Job_ID
+          value: $(params.Job_ID)
+        runAfter: 
+        - disconnected-activity1
+        taskSpec:
+          params:
+          - name: Token
+          - name: Project_ID
+          - name: Job_ID
+          steps:
+            - name: main
+              image: hejinchi/datastage:v0.41
+              imagePullPolicy: IfNotPresent
+              securityContext:
+                runAsUser: 0
+              command: ["/bin/bash", "-c"]
+              args: ["/datastage/dsRun $(params.Project_ID) $(params.Job_ID) $(params.Token)"]
+      - name: disconnected-activity3
+        params:
+        - name: Token
+          value: $(params.Token)
+        - name: Project_ID
+          value: $(params.Project_ID)
+        - name: Job_ID
+          value: $(params.Job_ID)
+        runAfter: 
+        - disconnected-activity2
+        taskSpec:
+          params:
+          - name: Token
+          - name: Project_ID
+          - name: Job_ID
+          steps:
+            - name: main
+              image: hejinchi/datastage:v0.41
+              imagePullPolicy: IfNotPresent
+              securityContext:
+                runAsUser: 0
+              command: ["/bin/bash", "-c"]
+              args: ["/datastage/dsRun $(params.Project_ID) $(params.Job_ID) $(params.Token)"]

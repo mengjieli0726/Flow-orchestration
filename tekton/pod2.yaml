@@ -1,0 +1,381 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"tekton.dev/v1beta1","kind":"PipelineRun","metadata":{"annotations":{},"name":"case3-disconnected-demo","namespace":"default"},"spec":{"params":[{"name":"Token","value":"eyJraWQiOiIyMDIwMTEyODE0NDkiLCJhbGciOiJSUzI1NiJ9.eyJpYW1faWQiOiJJQk1pZC01NTAwMDFXVDBHIiwiaWQiOiJJQk1pZC01NTAwMDFXVDBHIiwicmVhbG1pZCI6IklCTWlkIiwianRpIjoiN2ExMDMxNDQtNDAxMS00N2FiLWEyMzctYWVlMWRkNTc3OWY5IiwiaWRlbnRpZmllciI6IjU1MDAwMVdUMEciLCJnaXZlbl9uYW1lIjoiTWVuZyBKaWUiLCJmYW1pbHlfbmFtZSI6IkxpIiwibmFtZSI6Ik1lbmcgSmllIExpIiwiZW1haWwiOiJtZW5namllbGlAY24uaWJtLmNvbSIsInN1YiI6Im1lbmdqaWVsaUBjbi5pYm0uY29tIiwiYWNjb3VudCI6eyJ2YWxpZCI6dHJ1ZSwiYnNzIjoiZGIzYWEyMDU3OGQ0NDlmODhjYjY2ZDZkNmNlMmM5ODUiLCJmcm96ZW4iOnRydWV9LCJpYXQiOjE2MDY4MTQwMjAsImV4cCI6MTYwNjgxNzYyMCwiaXNzIjoiaHR0cHM6Ly9pYW0udGVzdC5jbG91ZC5pYm0uY29tL2lkZW50aXR5IiwiZ3JhbnRfdHlwZSI6InVybjppYm06cGFyYW1zOm9hdXRoOmdyYW50LXR5cGU6YXBpa2V5Iiwic2NvcGUiOiJpYm0gb3BlbmlkIiwiY2xpZW50X2lkIjoiZGVmYXVsdCIsImFjciI6MSwiYW1yIjpbInB3ZCJdfQ.NwSXrvdlHDjJYzZqkieOmC769Rt_uHJQtPIHYAti0wCUPHGQnBVTzW8ZxnLfa4h_dxQJjUsR9wPMZUva1gJbPfL3b0AUIOdHLGDQsOaSbuxu2gKNp2-qtUbsEjuI0ZMxFWGczgxxfYnA1cL4Xy-UyGikEe5IMPMx0nE0aG32sWOG0_xeVqvgJFvUGUpT4vrwMNdIIuVsQ0rREe2dzrGHIlQ3nQQ61_T6HXetM6QPjJ6J_Y_Qc4LNj88Nx2JvAtk2WKU_gWHkfECfgUFYUWVZOaSefcBHv5ylZwPrc3yYiqFynlM3LQRaVz5tTEanLlX3Ty-X3I4kHeCrgATh9EkZCQ"},{"name":"Project_ID","value":"2cf7dba3-440e-4916-8470-edc84df8816c"},{"name":"Job_ID","value":"43461a49-e310-42a1-8ad2-14dc53b5e04a"}],"pipelineSpec":{"params":[{"name":"Token"},{"name":"Project_ID"},{"name":"Job_ID"}],"tasks":[{"name":"disconnected-activity1","params":[{"name":"Token","value":"$(params.Token)"},{"name":"Project_ID","value":"$(params.Project_ID)"},{"name":"Job_ID","value":"$(params.Job_ID)"}],"taskSpec":{"params":[{"name":"Token"},{"name":"Project_ID"},{"name":"Job_ID"}],"steps":[{"args":["/datastage/dsRun $(params.Project_ID) $(params.Job_ID) $(params.Token)"],"command":["/bin/bash","-c"],"image":"hejinchi/datastage:v0.41","imagePullPolicy":"IfNotPresent","name":"main","securityContext":{"runAsUser":0}}]}},{"name":"disconnected-activity2","params":[{"name":"Token","value":"$(params.Token)"},{"name":"Project_ID","value":"$(params.Project_ID)"},{"name":"Job_ID","value":"$(params.Job_ID)"}],"runAfter":["disconnected-activity1"],"taskSpec":{"params":[{"name":"Token"},{"name":"Project_ID"},{"name":"Job_ID"}],"steps":[{"args":["/datastage/dsRun $(params.Project_ID) $(params.Job_ID) $(params.Token)"],"command":["/bin/bash","-c"],"image":"hejinchi/datastage:v0.41","imagePullPolicy":"IfNotPresent","name":"main","securityContext":{"runAsUser":0}}]}},{"name":"disconnected-activity3","params":[{"name":"Token","value":"$(params.Token)"},{"name":"Project_ID","value":"$(params.Project_ID)"},{"name":"Job_ID","value":"$(params.Job_ID)"}],"runAfter":["disconnected-activity2"],"taskSpec":{"params":[{"name":"Token"},{"name":"Project_ID"},{"name":"Job_ID"}],"steps":[{"args":["/datastage/dsRun $(params.Project_ID) $(params.Job_ID) $(params.Token)"],"command":["/bin/bash","-c"],"image":"hejinchi/datastage:v0.41","imagePullPolicy":"IfNotPresent","name":"main","securityContext":{"runAsUser":0}}]}}]},"serviceAccountName":"default"}}
+    pipeline.tekton.dev/release: v0.18.1
+    tekton.dev/ready: READY
+  creationTimestamp: "2020-12-01T09:31:15Z"
+  labels:
+    app.kubernetes.io/managed-by: tekton-pipelines
+    tekton.dev/pipeline: case3-disconnected-demo
+    tekton.dev/pipelineRun: case3-disconnected-demo
+    tekton.dev/pipelineTask: disconnected-activity2
+    tekton.dev/taskRun: case3-disconnected-demo-disconnected-activity2-vqvp9
+  managedFields:
+  - apiVersion: v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          .: {}
+          f:kubectl.kubernetes.io/last-applied-configuration: {}
+          f:pipeline.tekton.dev/release: {}
+          f:tekton.dev/ready: {}
+        f:labels:
+          .: {}
+          f:app.kubernetes.io/managed-by: {}
+          f:tekton.dev/pipeline: {}
+          f:tekton.dev/pipelineRun: {}
+          f:tekton.dev/pipelineTask: {}
+          f:tekton.dev/taskRun: {}
+        f:ownerReferences:
+          .: {}
+          k:{"uid":"098119d6-958a-40c0-9eab-3668642c3359"}:
+            .: {}
+            f:apiVersion: {}
+            f:blockOwnerDeletion: {}
+            f:controller: {}
+            f:kind: {}
+            f:name: {}
+            f:uid: {}
+      f:spec:
+        f:containers:
+          k:{"name":"step-main"}:
+            .: {}
+            f:args: {}
+            f:command: {}
+            f:env:
+              .: {}
+              k:{"name":"HOME"}:
+                .: {}
+                f:name: {}
+                f:value: {}
+            f:image: {}
+            f:imagePullPolicy: {}
+            f:name: {}
+            f:resources:
+              .: {}
+              f:requests:
+                .: {}
+                f:cpu: {}
+                f:ephemeral-storage: {}
+                f:memory: {}
+            f:securityContext:
+              .: {}
+              f:runAsUser: {}
+            f:terminationMessagePath: {}
+            f:terminationMessagePolicy: {}
+            f:volumeMounts:
+              .: {}
+              k:{"mountPath":"/tekton/creds"}:
+                .: {}
+                f:mountPath: {}
+                f:name: {}
+              k:{"mountPath":"/tekton/downward"}:
+                .: {}
+                f:mountPath: {}
+                f:name: {}
+              k:{"mountPath":"/tekton/home"}:
+                .: {}
+                f:mountPath: {}
+                f:name: {}
+              k:{"mountPath":"/tekton/results"}:
+                .: {}
+                f:mountPath: {}
+                f:name: {}
+              k:{"mountPath":"/tekton/tools"}:
+                .: {}
+                f:mountPath: {}
+                f:name: {}
+              k:{"mountPath":"/workspace"}:
+                .: {}
+                f:mountPath: {}
+                f:name: {}
+            f:workingDir: {}
+        f:dnsPolicy: {}
+        f:enableServiceLinks: {}
+        f:initContainers:
+          .: {}
+          k:{"name":"place-tools"}:
+            .: {}
+            f:command: {}
+            f:image: {}
+            f:imagePullPolicy: {}
+            f:name: {}
+            f:resources: {}
+            f:terminationMessagePath: {}
+            f:terminationMessagePolicy: {}
+            f:volumeMounts:
+              .: {}
+              k:{"mountPath":"/tekton/tools"}:
+                .: {}
+                f:mountPath: {}
+                f:name: {}
+        f:restartPolicy: {}
+        f:schedulerName: {}
+        f:securityContext: {}
+        f:serviceAccount: {}
+        f:serviceAccountName: {}
+        f:terminationGracePeriodSeconds: {}
+        f:volumes:
+          .: {}
+          k:{"name":"tekton-creds-init-home-lqvx2"}:
+            .: {}
+            f:emptyDir:
+              .: {}
+              f:medium: {}
+            f:name: {}
+          k:{"name":"tekton-internal-downward"}:
+            .: {}
+            f:downwardAPI:
+              .: {}
+              f:defaultMode: {}
+              f:items: {}
+            f:name: {}
+          k:{"name":"tekton-internal-home"}:
+            .: {}
+            f:emptyDir: {}
+            f:name: {}
+          k:{"name":"tekton-internal-results"}:
+            .: {}
+            f:emptyDir: {}
+            f:name: {}
+          k:{"name":"tekton-internal-tools"}:
+            .: {}
+            f:emptyDir: {}
+            f:name: {}
+          k:{"name":"tekton-internal-workspace"}:
+            .: {}
+            f:emptyDir: {}
+            f:name: {}
+    manager: controller
+    operation: Update
+    time: "2020-12-01T09:31:18Z"
+  - apiVersion: v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:status:
+        f:conditions:
+          k:{"type":"ContainersReady"}:
+            .: {}
+            f:lastProbeTime: {}
+            f:lastTransitionTime: {}
+            f:reason: {}
+            f:status: {}
+            f:type: {}
+          k:{"type":"Initialized"}:
+            .: {}
+            f:lastProbeTime: {}
+            f:lastTransitionTime: {}
+            f:reason: {}
+            f:status: {}
+            f:type: {}
+          k:{"type":"Ready"}:
+            .: {}
+            f:lastProbeTime: {}
+            f:lastTransitionTime: {}
+            f:reason: {}
+            f:status: {}
+            f:type: {}
+        f:containerStatuses: {}
+        f:hostIP: {}
+        f:initContainerStatuses: {}
+        f:phase: {}
+        f:podIP: {}
+        f:podIPs:
+          .: {}
+          k:{"ip":"10.244.0.26"}:
+            .: {}
+            f:ip: {}
+        f:startTime: {}
+    manager: kubelet
+    operation: Update
+    time: "2020-12-01T09:31:48Z"
+  name: case3-disconnected-demo-disconnected-activity2-vqvp9-pod-h779t
+  namespace: default
+  ownerReferences:
+  - apiVersion: tekton.dev/v1beta1
+    blockOwnerDeletion: true
+    controller: true
+    kind: TaskRun
+    name: case3-disconnected-demo-disconnected-activity2-vqvp9
+    uid: 098119d6-958a-40c0-9eab-3668642c3359
+  resourceVersion: "146893"
+  selfLink: /api/v1/namespaces/default/pods/case3-disconnected-demo-disconnected-activity2-vqvp9-pod-h779t
+  uid: 4dccddbd-a06a-448d-971a-0c5e7c6a86cc
+spec:
+  containers:
+  - args:
+    - -wait_file
+    - /tekton/downward/ready
+    - -wait_file_content
+    - -post_file
+    - /tekton/tools/0
+    - -termination_path
+    - /tekton/termination
+    - -entrypoint
+    - /bin/bash
+    - --
+    - -c
+    - /datastage/dsRun 2cf7dba3-440e-4916-8470-edc84df8816c 43461a49-e310-42a1-8ad2-14dc53b5e04a
+      eyJraWQiOiIyMDIwMTEyODE0NDkiLCJhbGciOiJSUzI1NiJ9.eyJpYW1faWQiOiJJQk1pZC01NTAwMDFXVDBHIiwiaWQiOiJJQk1pZC01NTAwMDFXVDBHIiwicmVhbG1pZCI6IklCTWlkIiwianRpIjoiN2ExMDMxNDQtNDAxMS00N2FiLWEyMzctYWVlMWRkNTc3OWY5IiwiaWRlbnRpZmllciI6IjU1MDAwMVdUMEciLCJnaXZlbl9uYW1lIjoiTWVuZyBKaWUiLCJmYW1pbHlfbmFtZSI6IkxpIiwibmFtZSI6Ik1lbmcgSmllIExpIiwiZW1haWwiOiJtZW5namllbGlAY24uaWJtLmNvbSIsInN1YiI6Im1lbmdqaWVsaUBjbi5pYm0uY29tIiwiYWNjb3VudCI6eyJ2YWxpZCI6dHJ1ZSwiYnNzIjoiZGIzYWEyMDU3OGQ0NDlmODhjYjY2ZDZkNmNlMmM5ODUiLCJmcm96ZW4iOnRydWV9LCJpYXQiOjE2MDY4MTQwMjAsImV4cCI6MTYwNjgxNzYyMCwiaXNzIjoiaHR0cHM6Ly9pYW0udGVzdC5jbG91ZC5pYm0uY29tL2lkZW50aXR5IiwiZ3JhbnRfdHlwZSI6InVybjppYm06cGFyYW1zOm9hdXRoOmdyYW50LXR5cGU6YXBpa2V5Iiwic2NvcGUiOiJpYm0gb3BlbmlkIiwiY2xpZW50X2lkIjoiZGVmYXVsdCIsImFjciI6MSwiYW1yIjpbInB3ZCJdfQ.NwSXrvdlHDjJYzZqkieOmC769Rt_uHJQtPIHYAti0wCUPHGQnBVTzW8ZxnLfa4h_dxQJjUsR9wPMZUva1gJbPfL3b0AUIOdHLGDQsOaSbuxu2gKNp2-qtUbsEjuI0ZMxFWGczgxxfYnA1cL4Xy-UyGikEe5IMPMx0nE0aG32sWOG0_xeVqvgJFvUGUpT4vrwMNdIIuVsQ0rREe2dzrGHIlQ3nQQ61_T6HXetM6QPjJ6J_Y_Qc4LNj88Nx2JvAtk2WKU_gWHkfECfgUFYUWVZOaSefcBHv5ylZwPrc3yYiqFynlM3LQRaVz5tTEanLlX3Ty-X3I4kHeCrgATh9EkZCQ
+    command:
+    - /tekton/tools/entrypoint
+    env:
+    - name: HOME
+      value: /tekton/home
+    image: hejinchi/datastage:v0.41
+    imagePullPolicy: IfNotPresent
+    name: step-main
+    resources:
+      requests:
+        cpu: "0"
+        ephemeral-storage: "0"
+        memory: "0"
+    securityContext:
+      runAsUser: 0
+    terminationMessagePath: /tekton/termination
+    terminationMessagePolicy: File
+    volumeMounts:
+    - mountPath: /tekton/tools
+      name: tekton-internal-tools
+    - mountPath: /tekton/downward
+      name: tekton-internal-downward
+    - mountPath: /tekton/creds
+      name: tekton-creds-init-home-lqvx2
+    - mountPath: /workspace
+      name: tekton-internal-workspace
+    - mountPath: /tekton/home
+      name: tekton-internal-home
+    - mountPath: /tekton/results
+      name: tekton-internal-results
+    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      name: default-token-ph75n
+      readOnly: true
+    workingDir: /workspace
+  dnsPolicy: ClusterFirst
+  enableServiceLinks: true
+  imagePullSecrets:
+  - name: dockerpullsecret
+  initContainers:
+  - command:
+    - /ko-app/entrypoint
+    - cp
+    - /ko-app/entrypoint
+    - /tekton/tools/entrypoint
+    image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/entrypoint:v0.18.1@sha256:59d56863e61d9b17f4d1529eecaf081e8ad08926bd008fb77e86ca4c2d9ef7d6
+    imagePullPolicy: IfNotPresent
+    name: place-tools
+    resources: {}
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+    volumeMounts:
+    - mountPath: /tekton/tools
+      name: tekton-internal-tools
+    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      name: default-token-ph75n
+      readOnly: true
+  nodeName: kind-control-plane
+  preemptionPolicy: PreemptLowerPriority
+  priority: 0
+  restartPolicy: Never
+  schedulerName: default-scheduler
+  securityContext: {}
+  serviceAccount: default
+  serviceAccountName: default
+  terminationGracePeriodSeconds: 30
+  tolerations:
+  - effect: NoExecute
+    key: node.kubernetes.io/not-ready
+    operator: Exists
+    tolerationSeconds: 300
+  - effect: NoExecute
+    key: node.kubernetes.io/unreachable
+    operator: Exists
+    tolerationSeconds: 300
+  volumes:
+  - emptyDir: {}
+    name: tekton-internal-workspace
+  - emptyDir: {}
+    name: tekton-internal-home
+  - emptyDir: {}
+    name: tekton-internal-results
+  - emptyDir: {}
+    name: tekton-internal-tools
+  - downwardAPI:
+      defaultMode: 420
+      items:
+      - fieldRef:
+          apiVersion: v1
+          fieldPath: metadata.annotations['tekton.dev/ready']
+        path: ready
+    name: tekton-internal-downward
+  - emptyDir:
+      medium: Memory
+    name: tekton-creds-init-home-lqvx2
+  - name: default-token-ph75n
+    secret:
+      defaultMode: 420
+      secretName: default-token-ph75n
+status:
+  conditions:
+  - lastProbeTime: null
+    lastTransitionTime: "2020-12-01T09:31:17Z"
+    reason: PodCompleted
+    status: "True"
+    type: Initialized
+  - lastProbeTime: null
+    lastTransitionTime: "2020-12-01T09:31:48Z"
+    reason: PodCompleted
+    status: "False"
+    type: Ready
+  - lastProbeTime: null
+    lastTransitionTime: "2020-12-01T09:31:48Z"
+    reason: PodCompleted
+    status: "False"
+    type: ContainersReady
+  - lastProbeTime: null
+    lastTransitionTime: "2020-12-01T09:31:15Z"
+    status: "True"
+    type: PodScheduled
+  containerStatuses:
+  - containerID: containerd://95d3100cf32b133da4f11f1a417d4a235feec49d37e6a5189743c1881654c2cf
+    image: docker.io/hejinchi/datastage:v0.41
+    imageID: docker.io/hejinchi/datastage@sha256:48b4c8f4f855b707b724d9eeee02422f2e6d9ffe491d6a042b81b316d435ef72
+    lastState: {}
+    name: step-main
+    ready: false
+    restartCount: 0
+    started: false
+    state:
+      terminated:
+        containerID: containerd://95d3100cf32b133da4f11f1a417d4a235feec49d37e6a5189743c1881654c2cf
+        exitCode: 0
+        finishedAt: "2020-12-01T09:31:47Z"
+        message: '[{"key":"StartedAt","value":"2020-12-01T09:31:19.017Z","type":"InternalTektonResult"}]'
+        reason: Completed
+        startedAt: "2020-12-01T09:31:17Z"
+  hostIP: 10.88.0.3
+  initContainerStatuses:
+  - containerID: containerd://2c83066d903c616b70573326b53627097a11d14b8cfcbfe29228f8d20391b38c
+    image: sha256:a88c0154ecc949f06a438575695912d5fcb77cd997bc02d199cc20e01568b632
+    imageID: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/entrypoint@sha256:59d56863e61d9b17f4d1529eecaf081e8ad08926bd008fb77e86ca4c2d9ef7d6
+    lastState: {}
+    name: place-tools
+    ready: true
+    restartCount: 0
+    state:
+      terminated:
+        containerID: containerd://2c83066d903c616b70573326b53627097a11d14b8cfcbfe29228f8d20391b38c
+        exitCode: 0
+        finishedAt: "2020-12-01T09:31:16Z"
+        reason: Completed
+        startedAt: "2020-12-01T09:31:16Z"
+  phase: Succeeded
+  podIP: 10.244.0.26
+  podIPs:
+  - ip: 10.244.0.26
+  qosClass: BestEffort
+  startTime: "2020-12-01T09:31:15Z"

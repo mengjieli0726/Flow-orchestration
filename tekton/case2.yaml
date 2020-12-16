@@ -1,0 +1,95 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  name: case2-linear-demo
+spec:
+  params:
+    - name: Token
+      value: ""
+    - name: Project_ID
+      value: ""
+    - name: Job_ID
+      value: ""
+  serviceAccountName: 'default'
+  pipelineSpec:
+    params:
+      - name: Token
+      - name: Project_ID
+      - name: Job_ID
+    results:
+      - name: run_id
+    tasks:
+      - name: linear-activity1
+        params:
+        - name: Token
+          value: $(params.Token)
+        - name: Project_ID
+          value: $(params.Project_ID)
+        - name: Job_ID
+          value: $(params.Job_ID)
+        taskSpec:
+          params:
+          - name: Token
+          - name: Project_ID
+          - name: Job_ID
+          steps:
+            - name: main
+              image: hejinchi/datastage:v0.41
+              imagePullPolicy: IfNotPresent
+              securityContext:
+                runAsUser: 0
+              command: ["/bin/bash", "-c"]
+              args: ["/datastage/getJob $(params.Project_ID) $(params.Job_ID) $(params.Token)"]
+      - name: linear-activity2
+        params:
+        - name: Token
+          value: $(params.Token)
+        - name: Project_ID
+          value: $(params.Project_ID)
+        - name: Job_ID
+          value: $(params.Job_ID)
+        runAfter:
+          - linear-activity1
+        results:
+        - name: run_id
+        taskSpec:
+          params:
+          - name: Token
+          - name: Project_ID
+          - name: Job_ID
+          results:
+          - name: run_id
+          steps:
+            - name: main
+              image: hejinchi/datastage:v0.41
+              imagePullPolicy: IfNotPresent
+              securityContext:
+                runAsUser: 0
+              command: ["/bin/bash", "-c"]
+              args: ["/datastage/createRun $(params.Project_ID) $(params.Job_ID) $(params.Token) $(results.run_id.path)"]
+      - name: linear-activity3
+        params:
+        - name: Token
+          value: $(params.Token)
+        - name: Project_ID
+          value: $(params.Project_ID)
+        - name: Job_ID
+          value: $(params.Job_ID)
+        - name: Run_ID
+          value: $(tasks.linear-activity2.results.run_id)
+        runAfter:
+          - linear-activity2
+        taskSpec:
+          params:
+          - name: Token
+          - name: Project_ID
+          - name: Job_ID
+          - name: Run_ID
+          steps:
+            - name: main
+              image: hejinchi/datastage:v0.41
+              imagePullPolicy: IfNotPresent
+              securityContext:
+                runAsUser: 0
+              command: ["/bin/bash", "-c"]
+              args: ["/datastage/deleteRun $(params.Project_ID) $(params.Job_ID) $(params.Token) $(params.Run_ID)"]

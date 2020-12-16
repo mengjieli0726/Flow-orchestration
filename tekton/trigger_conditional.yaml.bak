@@ -1,0 +1,103 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  name: trigger-conditions
+spec:
+  params:
+    - name: Project_ID
+      value: "828d13e0-e2cc-4eaa-a34e-101c653da6e9"
+    - name: Job_ID
+      value: "b90ee851-a3e1-42f0-bc4e-fbc96c285480"
+    - name: Job_Execution_Action
+      value: "Run"
+    - name: Triggers_Execution_Type
+      value: "OK"
+    - name: Triggers_Expression
+      value: ""
+      description: "Must specify if Triggers_Execution_Type is Custom"
+  serviceAccountName: 'default'
+  pipelineSpec:
+    params:
+      - name: Project_ID
+      - name: Job_ID
+      - name: Triggers_Execution_Type
+      - name: Job_Execution_Action
+      - name: Triggers_Expression
+    tasks:
+      - name: conditions-activity
+        params:
+        - name: Project_ID
+          value: $(params.Project_ID)
+        - name: Job_ID
+          value: $(params.Job_ID)
+        - name: Triggers_Execution_Type
+          value: $(params.Triggers_Execution_Type)
+        - name: Job_Execution_Action
+          value: $(params.Job_Execution_Action)
+        - name: Triggers_Expression
+          value: $(params.Triggers_Expression)
+        taskSpec:
+          params:
+          - name: Project_ID
+          - name: Job_ID
+          - name: Triggers_Execution_Type
+          - name: Job_Execution_Action
+          - name: Triggers_Expression
+          results:
+          - name: run_id
+          - name: state
+          - name: continue
+          steps:
+            - name: main
+              image: dspipelines/jobactivity:v0.4
+              imagePullPolicy: IfNotPresent
+              securityContext:
+                runAsUser: 0
+              command: ["/bin/bash", "-c"]
+              args: 
+                - >-
+                    python /dsRun.py
+                    --project-id "$(params.Project_ID)"
+                    --job-id "$(params.Job_ID)"
+                    --exe-action "$(params.Job_Execution_Action)"
+                    --expression-type "$(params.Triggers_Execution_Type)"
+                    --expression "$(params.Triggers_Expression)"
+                    --run-id-path "$(results.run_id.path)"
+                    --state-path "$(results.state.path)"
+                    --continue-path "$(results.continue.path)"
+      - name: next-activity
+        params:
+        - name: Project_ID
+          value: $(params.Project_ID)
+        - name: Job_ID
+          value: $(params.Job_ID)
+        - name: Run_ID
+          value: $(tasks.conditions-activity.results.run_id)
+        - name: continue
+          value: $(tasks.conditions-activity.results.continue)
+        runAfter:
+          - conditions-activity
+        when:
+          - input: $(tasks.conditions-activity.results.continue)
+            operator: in
+            values: ["yes"]
+        taskSpec:
+          params:
+          - name: Project_ID
+          - name: Job_ID
+          - name: Run_ID
+          - name: continue
+          steps:
+            - name: main
+              image: dspipelines/jobactivity:v0.4
+              imagePullPolicy: IfNotPresent
+              securityContext:
+                runAsUser: 0
+              command: ["/bin/bash", "-c"]
+              args:
+                - >-
+                    python /deleteRun.py
+                    --project-id "$(params.Project_ID)"
+                    --job-id "$(params.Job_ID)"
+                    --run-id "$(params.Run_ID)"
+
